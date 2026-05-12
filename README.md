@@ -1,4 +1,3 @@
-
 # 1. Create a class SET. Create member functions to perform the following SET operations:
 
 * is member
@@ -299,6 +298,301 @@ int main() {
     r.input();
     r.display();
     r.checkType();
+    return 0;
+}
+```
+
+# 3. Write a Program that generates all the permutations of a given set of digits, with or without repetition.
+
+```cpp
+#include<iostream>
+using namespace std;
+
+int digits[10];
+int n;
+
+// Without repetition using backtracking
+int chosen[10];
+bool used[10];
+
+void permuteWithout(int pos) {
+    if (pos == n) {
+        for (int i = 0; i < n; i++)
+            cout << chosen[i] << " ";
+        cout << endl;
+        return;
+    }
+    for (int i = 0; i < n; i++) {
+        if (!used[i]) {
+            used[i] = true;
+            chosen[pos] = digits[i];
+            permuteWithout(pos + 1);
+            used[i] = false;
+        }
+    }
+}
+
+// With repetition
+void permuteWith(int pos) {
+    if (pos == n) {
+        for (int i = 0; i < n; i++)
+            cout << chosen[i] << " ";
+        cout << endl;
+        return;
+    }
+    for (int i = 0; i < n; i++) {
+        chosen[pos] = digits[i];
+        permuteWith(pos + 1);
+    }
+}
+
+int main() {
+    int choice;
+
+    cout << "Enter number of digits: ";
+    cin >> n;
+    cout << "Enter the digits: ";
+    for (int i = 0; i < n; i++)
+        cin >> digits[i];
+
+    cout << "
+1. Permutations WITHOUT repetition" << endl;
+    cout << "2. Permutations WITH repetition" << endl;
+    cout << "Enter choice: ";
+    cin >> choice;
+
+    if (choice == 1) {
+        cout << "
+All permutations without repetition:" << endl;
+        for (int i = 0; i < n; i++) used[i] = false;
+        permuteWithout(0);
+    } else {
+        cout << "
+All permutations with repetition:" << endl;
+        permuteWith(0);
+    }
+
+    return 0;
+}
+```
+
+# 4. For any number n, write a program to list all the solutions of the equation x1 + x2 + x3 + ...+ xn = C, where C is a constant (C<=10) and x1, x2, x3,...,xn are nonnegative integers, using brute force strategy.
+
+```cpp
+#include<iostream>
+using namespace std;
+
+int n, C;
+int x[15]; // stores values of x1, x2, ... xn
+int count = 0;
+
+// Brute force: try all combinations using recursion
+void solve(int pos, int remaining) {
+    if (pos == n) {
+        if (remaining == 0) {
+            count++;
+            cout << "Solution " << count << ": ";
+            for (int i = 0; i < n; i++)
+                cout << "x" << i+1 << "=" << x[i] << " ";
+            cout << endl;
+        }
+        return;
+    }
+    // Try all values from 0 to remaining for current variable
+    for (int val = 0; val <= remaining; val++) {
+        x[pos] = val;
+        solve(pos + 1, remaining - val);
+    }
+}
+
+int main() {
+    cout << "Enter number of variables (n): ";
+    cin >> n;
+    cout << "Enter constant C (C <= 10): ";
+    cin >> C;
+
+    if (C > 10) {
+        cout << "C must be <= 10" << endl;
+        return 0;
+    }
+
+    cout << "
+All solutions of x1 + x2 + ... + x" << n << " = " << C << ":" << endl;
+    solve(0, C);
+    cout << "
+Total solutions: " << count << endl;
+
+    return 0;
+}
+```
+
+# 5. Write a Program to evaluate a polynomial function.
+
+```cpp
+#include<iostream>
+using namespace std;
+
+int n, C;
+int x[15]; // stores values of x1, x2, ... xn
+int count = 0;
+
+// Brute force: try all combinations using recursion
+void solve(int pos, int remaining) {
+    if (pos == n) {
+        if (remaining == 0) {
+            count++;
+            cout << "Solution " << count << ": ";
+            for (int i = 0; i < n; i++)
+                cout << "x" << i+1 << "=" << x[i] << " ";
+            cout << endl;
+        }
+        return;
+    }
+    // Try all values from 0 to remaining for current variable
+    for (int val = 0; val <= remaining; val++) {
+        x[pos] = val;
+        solve(pos + 1, remaining - val);
+    }
+}
+
+int main() {
+    cout << "Enter number of variables (n): ";
+    cin >> n;
+    cout << "Enter constant C (C <= 10): ";
+    cin >> C;
+
+    if (C > 10) {
+        cout << "C must be <= 10" << endl;
+        return 0;
+    }
+
+    cout << "
+All solutions of x1 + x2 + ... + x" << n << " = " << C << ":" << endl;
+    solve(0, C);
+    cout << "
+Total solutions: " << count << endl;
+
+    return 0;
+}
+```
+
+# 6. Write a Program to check if a given graph is a complete graph. Represent the graph using the Adjacency Matrix representation.
+
+```cpp
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n; // number of vertices
+    int matrix[10][10];
+
+    cout << "Enter number of vertices: ";
+    cin >> n;
+
+    cout << "Enter adjacency matrix (0 or 1, diagonal should be 0):" << endl;
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++) {
+            cout << "matrix[" << i+1 << "][" << j+1 << "] = ";
+            cin >> matrix[i][j];
+        }
+
+    // Display the matrix
+    cout << "
+Adjacency Matrix:" << endl;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++)
+            cout << matrix[i][j] << " ";
+        cout << endl;
+    }
+
+    // Check if complete graph
+    // In a complete graph: every pair of vertices is connected
+    // i.e., matrix[i][j] = 1 for all i != j
+    bool isComplete = true;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (i != j && matrix[i][j] != 1) {
+                isComplete = false;
+                break;
+            }
+        }
+        if (!isComplete) break;
+    }
+
+    if (isComplete)
+        cout << "
+This is a COMPLETE GRAPH (K" << n << ")." << endl;
+    else
+        cout << "
+This is NOT a complete graph." << endl;
+
+    // Also show total edges
+    int edges = 0;
+    for (int i = 0; i < n; i++)
+        for (int j = i+1; j < n; j++)
+            if (matrix[i][j] == 1)
+                edges++;
+
+    cout << "Total edges: " << edges << endl;
+    cout << "Edges needed for complete graph: " << n*(n-1)/2 << endl;
+
+    return 0;
+}
+```
+
+# 7. Write a Program to accept a directed graph G and compute the in-degree and outdegree of each vertex.
+
+```cpp
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n; // number of vertices
+    int matrix[10][10];
+
+    cout << "Enter number of vertices in directed graph: ";
+    cin >> n;
+
+    cout << "Enter adjacency matrix (matrix[i][j]=1 means edge from i to j):" << endl;
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++) {
+            cout << "matrix[" << i+1 << "][" << j+1 << "] = ";
+            cin >> matrix[i][j];
+        }
+
+    // Display the matrix
+    cout << "
+Adjacency Matrix:" << endl;
+    cout << "     ";
+    for (int i = 0; i < n; i++) cout << "V" << i+1 << " ";
+    cout << endl;
+    for (int i = 0; i < n; i++) {
+        cout << "V" << i+1 << " -> ";
+        for (int j = 0; j < n; j++)
+            cout << matrix[i][j] << "  ";
+        cout << endl;
+    }
+
+    // Compute in-degree and out-degree
+    // Out-degree of vertex i = sum of row i
+    // In-degree of vertex i = sum of column i
+    int inDegree[10] = {0};
+    int outDegree[10] = {0};
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            outDegree[i] += matrix[i][j]; // row sum
+            inDegree[i] += matrix[j][i];  // column sum
+        }
+    }
+
+    cout << "
+Vertex | In-Degree | Out-Degree" << endl;
+    cout << "-------|-----------|----------" << endl;
+    for (int i = 0; i < n; i++) {
+        cout << "  V" << i+1 << "   |     " << inDegree[i] << "     |     " << outDegree[i] << endl;
+    }
+
     return 0;
 }
 ```
